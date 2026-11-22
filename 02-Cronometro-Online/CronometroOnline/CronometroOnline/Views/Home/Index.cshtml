@@ -1,0 +1,85 @@
+﻿@model CronometroOnline.Models.CronometroModel
+
+@{
+    ViewData["Title"] = Model.Titulo;
+}
+
+<div class="stopwatch-container">
+
+    <header class="stopwatch-header">
+        <div class="stopwatch-icon">⏱</div>
+
+        <h1>@Model.Titulo</h1>
+
+        <p>@Model.Descripcion</p>
+    </header>
+
+    <section class="stopwatch-card">
+
+        <div class="status-indicator">
+            <span id="statusDot" class="status-dot"></span>
+            <span id="statusText">DETENIDO</span>
+        </div>
+
+        <div class="timer-display" id="timerDisplay">
+            00:00:00<span class="milliseconds">.00</span>
+        </div>
+
+        <div class="timer-labels">
+            <span>HORAS</span>
+            <span>MINUTOS</span>
+            <span>SEGUNDOS</span>
+            <span>CENTÉSIMAS</span>
+        </div>
+
+        <div class="timer-buttons">
+
+            <button id="startButton" class="btn-timer btn-start">
+                ▶ Iniciar
+            </button>
+
+            <button id="pauseButton" class="btn-timer btn-pause" disabled>
+                Ⅱ Pausar
+            </button>
+
+            <button id="lapButton" class="btn-timer btn-lap" disabled>
+                ⚑ Vuelta
+            </button>
+
+            <button id="resetButton" class="btn-timer btn-reset">
+                ↻ Reiniciar
+            </button>
+
+        </div>
+
+    </section>
+
+    <section class="laps-card">
+
+        <div class="laps-header">
+            <h2>Registro de vueltas</h2>
+
+            <span id="lapCounter" class="lap-counter">
+                0 vueltas
+            </span>
+        </div>
+
+        <div id="lapsList" class="laps-list">
+            <div class="empty-laps">
+                <span>🏁</span>
+                <p>Aún no hay vueltas registradas.</p>
+                <small>Inicia el cronómetro y registra tu primera vuelta.</small>
+            </div>
+        </div>
+
+    </section>
+
+    <footer class="stopwatch-footer">
+        Desarrollado con C# y ASP.NET Core MVC
+    </footer>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/cronometro.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,199 @@
+body {
+    background-color: #0d0b14;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+}
+
+.stopwatch-container {
+    max-width: 650px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.stopwatch-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+    .stopwatch-header h1 {
+        font-size: 32px;
+        color: #ffffff;
+    }
+
+    .stopwatch-header p {
+        color: #b9a9d6;
+    }
+
+.stopwatch-icon {
+    font-size: 42px;
+}
+
+.stopwatch-card,
+.laps-card {
+    background: #211632;
+    padding: 28px;
+    border-radius: 14px;
+    margin-bottom: 22px;
+    border: 1px solid #392454;
+    box-shadow: 0 5px 20px rgba(112, 55, 180, 0.15);
+}
+
+.status-indicator {
+    text-align: center;
+    color: #c7b5e5;
+    margin-bottom: 15px;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    background: #777;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+    .status-dot.running {
+        background: #a855f7;
+        box-shadow: 0 0 10px #a855f7;
+    }
+
+.timer-display {
+    text-align: center;
+    font-size: 55px;
+    font-weight: bold;
+    color: #c084fc;
+    margin: 25px 0;
+    text-shadow: 0 0 15px rgba(192, 132, 252, 0.25);
+}
+
+.milliseconds {
+    color: #a78bca;
+    font-size: 35px;
+}
+
+.timer-labels {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 10px;
+    color: #a99aba;
+    margin-bottom: 25px;
+}
+
+.timer-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.btn-timer {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 7px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+    .btn-timer:hover:not(:disabled) {
+        transform: translateY(-2px);
+        filter: brightness(1.15);
+    }
+
+    .btn-timer:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+.btn-start {
+    background: #9333ea;
+}
+
+.btn-pause {
+    background: #6d28d9;
+}
+
+.btn-lap {
+    background: #7c3aed;
+}
+
+.btn-reset {
+    background: #4b3861;
+}
+
+.laps-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .laps-header h2 {
+        font-size: 20px;
+        color: #ffffff;
+    }
+
+.lap-counter {
+    background: #392454;
+    color: #d8b4fe;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.empty-laps {
+    text-align: center;
+    padding: 25px;
+    color: #a99aba;
+}
+
+    .empty-laps span {
+        font-size: 30px;
+    }
+
+.lap-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 14px 5px;
+    border-bottom: 1px solid #392454;
+    font-size: 14px;
+    color: #e9ddf7;
+}
+
+.lap-partial {
+    text-align: center;
+    color: #c084fc;
+}
+
+.lap-total {
+    text-align: right;
+    color: #b9a9d6;
+}
+
+.stopwatch-footer {
+    text-align: center;
+    font-size: 12px;
+    color: #806b9b;
+    margin-top: 25px;
+}
+
+@media (max-width: 600px) {
+    .timer-display {
+        font-size: 38px;
+    }
+
+    .milliseconds {
+        font-size: 25px;
+    }
+
+    .timer-labels {
+        gap: 8px;
+        font-size: 8px;
+    }
+
+    .btn-timer {
+        flex: 1 1 40%;
+    }
+}
