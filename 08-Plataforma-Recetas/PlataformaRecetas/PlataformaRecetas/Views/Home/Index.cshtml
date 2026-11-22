@@ -1,0 +1,250 @@
+﻿@model List<PlataformaRecetas.Models.RecetaModel>
+
+@{
+    ViewData["Title"] = "Plataforma de Recetas";
+    string categoriaSeleccionada = ViewBag.CategoriaSeleccionada ?? "Todas";
+    string[] categorias = (string[])ViewBag.Categorias;
+}
+
+<div class="recipes-container">
+    <header class="recipes-header">
+        <div class="header-icon">🍳</div>
+        <h1>Mi Plataforma de Recetas</h1>
+        <p>Descubre, crea y comparte tus recetas favoritas</p>
+    </header>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="error-message">@TempData["Error"]</div>
+    }
+
+    <section class="recipe-form-card">
+        <h2>Agregar una receta</h2>
+
+        <form asp-action="Agregar" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="nombre">Nombre de la receta</label>
+                <input type="text" id="nombre" name="nombre"
+                       maxlength="100" placeholder="Ej. Pasta Alfredo" required />
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <input type="text" id="descripcion" name="descripcion"
+                       maxlength="300" placeholder="Describe brevemente tu receta" required />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="categoria">Categoría</label>
+                    <select id="categoria" name="categoria" required>
+                        <option value="">Selecciona una categoría</option>
+                        @foreach (string categoria in categorias)
+                        {
+                            <option value="@categoria">@categoria</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tiempoPreparacion">Tiempo de preparación (minutos)</label>
+                    <input type="number" id="tiempoPreparacion"
+                           name="tiempoPreparacion" min="1" max="1440"
+                           placeholder="Ej. 30" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="ingredientes">Ingredientes</label>
+                <textarea id="ingredientes" name="ingredientes"
+                          maxlength="2000" rows="4"
+                          placeholder="Escribe los ingredientes, uno por línea..."
+                          required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="instrucciones">Preparación</label>
+                <textarea id="instrucciones" name="instrucciones"
+                          maxlength="3000" rows="5"
+                          placeholder="Describe los pasos de preparación..."
+                          required></textarea>
+            </div>
+
+            <button type="submit" class="add-button">Guardar receta</button>
+        </form>
+    </section>
+
+    <section class="recipes-section">
+        <div class="section-heading">
+            <h2>Recetas disponibles</h2>
+
+            <form asp-action="Index" method="get" class="filter-form">
+                <select name="categoria" onchange="this.form.submit()">
+                    <option value="Todas"
+                            selected="@(categoriaSeleccionada == "Todas")">
+                        Todas las categorías
+                    </option>
+
+                    @foreach (string categoria in categorias)
+                    {
+                        <option value="@categoria"
+                                selected="@(categoriaSeleccionada == categoria)">
+                            @categoria
+                        </option>
+                    }
+                </select>
+            </form>
+        </div>
+
+        <div class="recipe-count">
+            @Model.Count receta(s) encontrada(s)
+        </div>
+
+        @if (Model.Count == 0)
+        {
+            <div class="empty-state">
+                <span>📖</span>
+                <h3>No hay recetas disponibles</h3>
+                <p>Agrega tu primera receta para comenzar.</p>
+            </div>
+        }
+        else
+        {
+            <div class="recipes-grid">
+                @foreach (var receta in Model)
+                {
+                    <article class="recipe-card">
+                        <div class="recipe-card-header">
+                            <span class="category-tag">@receta.Categoria</span>
+                            <span class="recipe-time">⏱ @receta.TiempoPreparacion min</span>
+                        </div>
+
+                        <h3>@receta.Nombre</h3>
+                        <p class="recipe-description">@receta.Descripcion</p>
+
+                        <button type="button" class="details-button"
+                                data-name="@receta.Nombre"
+                                data-description="@receta.Descripcion"
+                                data-category="@receta.Categoria"
+                                data-time="@receta.TiempoPreparacion"
+                                data-ingredients="@receta.Ingredientes"
+                                data-instructions="@receta.Instrucciones">
+                            Ver receta completa
+                        </button>
+
+                        <div class="recipe-actions">
+                            <button type="button" class="edit-button"
+                                    data-id="@receta.Id"
+                                    data-name="@receta.Nombre"
+                                    data-description="@receta.Descripcion"
+                                    data-category="@receta.Categoria"
+                                    data-time="@receta.TiempoPreparacion"
+                                    data-ingredients="@receta.Ingredientes"
+                                    data-instructions="@receta.Instrucciones">
+                                Editar
+                            </button>
+
+                            <form asp-action="Eliminar" method="post"
+                                  onsubmit="return confirm('¿Seguro que deseas eliminar esta receta?');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@receta.Id" />
+                                <button type="submit" class="delete-button">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </section>
+
+    <footer class="recipes-footer">
+        Cocina con creatividad y disfruta cada preparación.
+    </footer>
+</div>
+
+<div id="details-modal" class="modal-overlay">
+    <div class="modal-card">
+        <button type="button" class="close-modal" data-close="details-modal">×</button>
+        <span id="details-category" class="category-tag"></span>
+        <h2 id="details-name"></h2>
+        <p id="details-description" class="details-description"></p>
+        <p class="details-time">⏱ <span id="details-time"></span> minutos</p>
+
+        <h3>Ingredientes</h3>
+        <p id="details-ingredients" class="details-text"></p>
+
+        <h3>Preparación</h3>
+        <p id="details-instructions" class="details-text"></p>
+    </div>
+</div>
+
+<div id="edit-modal" class="modal-overlay">
+    <div class="modal-card">
+        <button type="button" class="close-modal" data-close="edit-modal">×</button>
+        <h2>Editar receta</h2>
+
+        <form asp-action="Editar" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="id" id="edit-id" />
+
+            <div class="form-group">
+                <label for="edit-name">Nombre</label>
+                <input type="text" name="nombre" id="edit-name"
+                       maxlength="100" required />
+            </div>
+
+            <div class="form-group">
+                <label for="edit-description">Descripción</label>
+                <input type="text" name="descripcion" id="edit-description"
+                       maxlength="300" required />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit-category">Categoría</label>
+                    <select name="categoria" id="edit-category" required>
+                        @foreach (string categoria in categorias)
+                        {
+                            <option value="@categoria">@categoria</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-time">Tiempo en minutos</label>
+                    <input type="number" name="tiempoPreparacion"
+                           id="edit-time" min="1" max="1440" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-ingredients">Ingredientes</label>
+                <textarea name="ingredientes" id="edit-ingredients"
+                          maxlength="2000" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-instructions">Preparación</label>
+                <textarea name="instrucciones" id="edit-instructions"
+                          maxlength="3000" rows="5" required></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="cancel-button"
+                        data-close="edit-modal">
+                    Cancelar
+                </button>
+                <button type="submit" class="save-button">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/recetas.js" asp-append-version="true"></script>
+}
