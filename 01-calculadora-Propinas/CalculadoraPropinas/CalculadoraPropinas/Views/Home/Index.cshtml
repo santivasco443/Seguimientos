@@ -1,0 +1,197 @@
+﻿@model CalculadoraPropinas.Models.CalculadoraModel
+
+@{
+    ViewData["Title"] = "Calculadora de Propinas";
+}
+
+<div class="calculator-container">
+
+    <div class="calculator-header">
+        <div class="calculator-icon">%</div>
+
+        <h1>Calculadora de Propinas</h1>
+
+        <p>
+            Calcula fácilmente la propina y el total de tu cuenta.
+        </p>
+    </div>
+
+    <div class="calculator-card">
+
+        <form asp-controller="Home"
+              asp-action="Index"
+              method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="validation-message">
+            </div>
+
+            <div class="form-group">
+
+                <label asp-for="MontoCuenta">
+                    Total de la cuenta
+                </label>
+
+                <div class="input-container">
+                    <span>$</span>
+
+                    <input asp-for="MontoCuenta"
+                           type="number"
+                           step="0.01"
+                           min="0.01"
+                           placeholder="Ej: 100000" />
+                </div>
+
+                <span asp-validation-for="MontoCuenta"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Selecciona el porcentaje de propina</label>
+
+                <div class="tip-options">
+
+                    <button type="button" class="tip-button"
+                            data-value="10">
+                        10%
+                    </button>
+
+                    <button type="button" class="tip-button active"
+                            data-value="15">
+                        15%
+                    </button>
+
+                    <button type="button" class="tip-button"
+                            data-value="18">
+                        18%
+                    </button>
+
+                    <button type="button" class="tip-button"
+                            data-value="20">
+                        20%
+                    </button>
+
+                </div>
+
+                <label asp-for="PorcentajePropina">
+                    Porcentaje personalizado
+                </label>
+
+                <div class="input-container">
+
+                    <input asp-for="PorcentajePropina"
+                           id="PorcentajePropina"
+                           type="number"
+                           min="0"
+                           max="100"
+                           step="0.01"
+                           placeholder="Ej: 15" />
+
+                    <span>%</span>
+
+                </div>
+
+                <span asp-validation-for="PorcentajePropina"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+            <button type="submit" class="calculate-button">
+                Calcular propina
+            </button>
+
+        </form>
+
+        @if (ViewBag.MostrarResultado == true)
+        {
+            <div class="result-container">
+
+                <h2>Resumen de tu cuenta</h2>
+
+                <div class="result-row">
+                    <span>Subtotal</span>
+
+                    <strong>
+                        $ @Model.MontoCuenta.ToString("N2",
+                                                    System.Globalization.CultureInfo.GetCultureInfo("es-CO"))
+                    </strong>
+                </div>
+
+                <div class="result-row">
+                    <span>Propina (@Model.PorcentajePropina%)</span>
+
+                    <strong class="tip-result">
+                        $ @Model.CalcularPropina().ToString("N2",
+                                                    System.Globalization.CultureInfo.GetCultureInfo("es-CO"))
+                    </strong>
+                </div>
+
+                <div class="result-divider"></div>
+
+                <div class="result-row total-row">
+                    <span>Total a pagar</span>
+
+                    <strong>
+                        $ @Model.CalcularTotal().ToString("N2",
+                                                    System.Globalization.CultureInfo.GetCultureInfo("es-CO"))
+                    </strong>
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+    <p class="footer-text">
+        Desarrollado con C# y ASP.NET Core MVC.
+    </p>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        const porcentajeInput =
+            document.getElementById("PorcentajePropina");
+
+        const botones =
+            document.querySelectorAll(".tip-button");
+
+        botones.forEach(boton => {
+
+            boton.addEventListener("click", function () {
+
+                porcentajeInput.value = this.dataset.value;
+
+                botones.forEach(b => {
+                    b.classList.remove("active");
+                });
+
+                this.classList.add("active");
+
+            }); 
+
+        });
+
+        porcentajeInput.addEventListener("input", function () {
+
+            botones.forEach(boton => {
+
+                boton.classList.toggle(
+                    "active",
+                    boton.dataset.value === this.value
+                );
+
+            });
+
+        });
+
+    </script>
+}

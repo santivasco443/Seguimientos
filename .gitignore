@@ -1,0 +1,24 @@
+# Visual Studio
+.vs/
+**/.vs/
+
+# Archivos de compilacion
+[Bb]in/
+[Oo]bj/
+
+# Configuracion personal
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos temporales
+*.tmp
+*.log
+
+# Archivos del sistema
+Thumbs.db
+.DS_Store
+
+# Publicaciones locales
+publish/
