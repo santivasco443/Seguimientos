@@ -1,0 +1,137 @@
+﻿@model List<GestorGastos.Models.GastoModel>
+
+@{
+    ViewData["Title"] = "Gestor de Gastos";
+    string categoriaSeleccionada = ViewBag.CategoriaSeleccionada ?? "Todas";
+    decimal totalGeneral = ViewBag.TotalGeneral;
+    decimal totalFiltrado = Model.Sum(g => g.Monto);
+    var cultura = new System.Globalization.CultureInfo("es-CO");
+}
+
+<div class="expenses-container">
+    <header class="expenses-header">
+        <div class="header-icon">💰</div>
+        <h1>Gestor de Gastos</h1>
+        <p>Controla tus gastos y organiza tus finanzas</p>
+    </header>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="error-message">@TempData["Error"]</div>
+    }
+
+    <section class="summary-card">
+        <span>Total de gastos registrados</span>
+        <strong>@totalGeneral.ToString("C", cultura)</strong>
+        <small>@Model.Count registro(s) en la vista actual</small>
+    </section>
+
+    <section class="expense-form-card">
+        <h2>Registrar nuevo gasto</h2>
+
+        <form asp-action="Agregar" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <input type="text" id="descripcion" name="descripcion"
+                       maxlength="100" placeholder="Ej. Compra de mercado" required />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="categoria">Categoría</label>
+                    <select id="categoria" name="categoria" required>
+                        <option value="">Selecciona una categoría</option>
+                        @foreach (string categoria in (string[])ViewBag.Categorias)
+                        {
+                            <option value="@categoria">@categoria</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="monto">Monto</label>
+                    <input type="number" id="monto" name="monto"
+                           min="0.01" max="999999999" step="0.01"
+                           placeholder="Ej. 25000" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha">Fecha</label>
+                <input type="date" id="fecha" name="fecha"
+                       value="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+            </div>
+
+            <button type="submit" class="add-button">Registrar gasto</button>
+        </form>
+    </section>
+
+    <section class="records-section">
+        <div class="section-heading">
+            <h2>Historial de gastos</h2>
+
+            <form asp-action="Index" method="get" class="filter-form">
+                <select name="categoria" onchange="this.form.submit()">
+                    <option value="Todas" selected="@(categoriaSeleccionada == "Todas")">
+                        Todas las categorías
+                    </option>
+                    @foreach (string categoria in (string[])ViewBag.Categorias)
+                    {
+                        <option value="@categoria"
+                                selected="@(categoriaSeleccionada == categoria)">
+                            @categoria
+                        </option>
+                    }
+                </select>
+            </form>
+        </div>
+
+        <div class="filtered-total">
+            <span>Total de la vista filtrada</span>
+            <strong>@totalFiltrado.ToString("C", cultura)</strong>
+        </div>
+
+        @if (Model.Count == 0)
+        {
+            <div class="empty-state">
+                <span>📊</span>
+                <h3>No hay gastos registrados</h3>
+                <p>Agrega tu primer gasto para comenzar.</p>
+            </div>
+        }
+        else
+        {
+            <div class="expense-list">
+                @foreach (var gasto in Model)
+                {
+                    <article class="expense-item">
+                        <div class="expense-info">
+                            <h3>@gasto.Descripcion</h3>
+                            <span class="category-tag">@gasto.Categoria</span>
+                            <small>@gasto.Fecha.ToString("dd/MM/yyyy")</small>
+                        </div>
+
+                        <div class="expense-actions">
+                            <strong>@gasto.Monto.ToString("C", cultura)</strong>
+
+                            <form asp-action="Eliminar" method="post"
+                                  onsubmit="return confirm('¿Seguro que deseas eliminar este gasto?');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@gasto.Id" />
+                                <button type="submit" class="delete-button">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </section>
+
+    <footer class="expenses-footer">
+        Mantén tus finanzas organizadas.
+    </footer>
+</div>
