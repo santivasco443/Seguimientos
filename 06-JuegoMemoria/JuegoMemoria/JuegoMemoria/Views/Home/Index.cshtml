@@ -1,0 +1,53 @@
+﻿@model JuegoMemoria.Models.JuegoMemoriaModel
+
+@{
+    ViewData["Title"] = Model.Titulo;
+}
+
+<div class="game-container">
+    <header class="game-header">
+        <div class="header-icon">🧠</div>
+        <h1>@Model.Titulo</h1>
+        <p>Encuentra todas las parejas de cartas iguales</p>
+    </header>
+
+    <section class="game-panel">
+        <div class="stats">
+            <div class="stat-box">
+                <span class="stat-label">Movimientos</span>
+                <strong id="moves">0</strong>
+            </div>
+
+            <div class="stat-box">
+                <span class="stat-label">Parejas</span>
+                <strong id="matches">0 / @Model.CantidadParejas</strong>
+            </div>
+
+            <div class="stat-box">
+                <span class="stat-label">Tiempo</span>
+                <strong id="timer">00:00</strong>
+            </div>
+        </div>
+
+        <div id="game-board"
+             class="game-board"
+             data-pairs="@Model.CantidadParejas">
+        </div>
+
+        <div id="game-message" class="game-message" aria-live="polite">
+            Encuentra las 8 parejas para ganar.
+        </div>
+
+        <button type="button" id="restart-button" class="restart-button">
+            Reiniciar juego
+        </button>
+    </section>
+
+    <footer class="game-footer">
+        Pon a prueba tu memoria y supera tu propio récord.
+    </footer>
+</div>
+
+@section Scripts {
+    <script src="~/js/juego.js" asp-append-version="true"></script>
+}

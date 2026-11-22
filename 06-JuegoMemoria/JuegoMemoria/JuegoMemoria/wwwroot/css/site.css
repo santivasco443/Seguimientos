@@ -1,0 +1,198 @@
+
+html {
+    font-size: 16px;
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #0d0b14;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+.game-container {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header-icon {
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 18px;
+    background: #392454;
+    font-size: 32px;
+}
+
+.game-header h1 {
+    margin: 0 0 10px;
+    font-size: 28px;
+}
+
+.game-header p {
+    margin: 0;
+    color: #b8a8ca;
+    font-size: 14px;
+}
+
+.game-panel {
+    padding: 25px;
+    border: 1px solid #392454;
+    border-radius: 18px;
+    background: #211632;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 15px 8px;
+    border: 1px solid #392454;
+    border-radius: 11px;
+    background: #2b1d3d;
+}
+
+.stat-label {
+    color: #b8a8ca;
+    font-size: 12px;
+}
+
+.stat-box strong {
+    color: #c084fc;
+    font-size: 22px;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 570px;
+    margin: 0 auto;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    border: 1px solid #563477;
+    border-radius: 13px;
+    background: #392454;
+    color: transparent;
+    font-size: clamp(24px, 5vw, 42px);
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+    .memory-card:hover:not(:disabled) {
+        background: #563477;
+        transform: translateY(-2px);
+    }
+
+    .memory-card.flipped {
+        background: #0d0b14;
+        border-color: #9333ea;
+        color: #ffffff;
+        cursor: default;
+    }
+
+    .memory-card.matched {
+        background: #253d35;
+        border-color: #4b9b75;
+        color: #ffffff;
+        cursor: default;
+        opacity: 0.85;
+    }
+
+    .memory-card:disabled {
+        cursor: default;
+    }
+
+.game-message {
+    min-height: 25px;
+    margin: 22px 0 15px;
+    text-align: center;
+    color: #c084fc;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.restart-button {
+    display: block;
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+    padding: 14px;
+    border: none;
+    border-radius: 9px;
+    background: #9333ea;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+    .restart-button:hover {
+        background: #7e22ce;
+    }
+
+.game-footer {
+    margin-top: 25px;
+    text-align: center;
+    color: #8f7ba5;
+    font-size: 12px;
+}
+
+@media (max-width: 550px) {
+    .game-container {
+        padding: 25px 12px;
+    }
+
+    .game-panel {
+        padding: 16px 12px;
+    }
+
+    .game-header h1 {
+        font-size: 23px;
+    }
+
+    .game-board {
+        gap: 8px;
+    }
+
+    .memory-card {
+        border-radius: 9px;
+    }
+
+    .stat-box {
+        padding: 12px 5px;
+    }
+
+        .stat-box strong {
+            font-size: 19px;
+        }
+
+    .stat-label {
+        font-size: 10px;
+    }
+}
