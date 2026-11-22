@@ -1,0 +1,380 @@
+
+html {
+    font-size: 16px;
+    min-height: 100%;
+}
+
+:root {
+    --fondo: #0d0b14;
+    --tarjeta: #211632;
+    --borde: #392454;
+    --violeta: #9333ea;
+    --acento: #c084fc;
+    --texto: #ffffff;
+    --texto-secundario: #b9accb;
+    --rojo: #dc3545;
+    --verde: #22c55e;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+    .page-header h1 {
+        color: var(--acento);
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
+
+    .page-header p {
+        color: var(--texto-secundario);
+        font-size: 1.05rem;
+    }
+
+.form-card,
+.encuesta-card,
+.empty-state {
+    background: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: 16px;
+    padding: 25px;
+}
+
+.form-card {
+    max-width: 750px;
+    margin: 0 auto 45px;
+}
+
+    .form-card h2,
+    .encuestas-section h2 {
+        color: var(--acento);
+        margin-bottom: 22px;
+    }
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-bottom: 20px;
+}
+
+    .form-group label {
+        color: var(--texto);
+        font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    #opcionesContainer input {
+        width: 100%;
+        padding: 12px 14px;
+        color: var(--texto);
+        background: #120d1d;
+        border: 1px solid var(--borde);
+        border-radius: 9px;
+        outline: none;
+    }
+
+    .form-group textarea {
+        min-height: 90px;
+        resize: vertical;
+    }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        #opcionesContainer input:focus {
+            border-color: var(--acento);
+            box-shadow: 0 0 0 3px #9333ea33;
+        }
+
+input::placeholder,
+textarea::placeholder {
+    color: #887a99;
+}
+
+#opcionesContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group small {
+    color: var(--texto-secundario);
+    margin-top: 5px;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    border-radius: 9px;
+    padding: 11px 18px;
+    font-weight: bold;
+    transition: background 0.2s, transform 0.2s;
+}
+
+    button:hover {
+        transform: translateY(-2px);
+    }
+
+.btn-primary {
+    color: white;
+    background: var(--violeta);
+}
+
+    .btn-primary:hover {
+        background: #7e22ce;
+    }
+
+.btn-secondary {
+    color: white;
+    background: #493263;
+}
+
+    .btn-secondary:hover {
+        background: #624184;
+    }
+
+.btn-danger {
+    color: white;
+    background: var(--rojo);
+}
+
+    .btn-danger:hover {
+        background: #b91c1c;
+    }
+
+#agregarOpcion {
+    align-self: flex-start;
+    margin-top: 12px;
+}
+
+.encuestas-section {
+    margin-top: 45px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+    .section-heading span {
+        color: var(--acento);
+        background: var(--tarjeta);
+        border: 1px solid var(--borde);
+        border-radius: 20px;
+        padding: 7px 14px;
+    }
+
+.encuestas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 22px;
+}
+
+.encuesta-card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.encuesta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+    .encuesta-header h3 {
+        color: var(--acento);
+        font-size: 1.3rem;
+        margin-bottom: 8px;
+    }
+
+    .encuesta-header p {
+        color: var(--texto-secundario);
+        margin: 0;
+        overflow-wrap: anywhere;
+    }
+
+.estado {
+    flex-shrink: 0;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.publicada {
+    color: #86efac;
+    background: #14532d;
+}
+
+.cerrada {
+    color: #fca5a5;
+    background: #7f1d1d;
+}
+
+.encuesta-card h4 {
+    color: var(--texto);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.opciones-voto {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.opcion-voto {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: #120d1d;
+    border: 1px solid var(--borde);
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+    .opcion-voto:hover {
+        border-color: var(--acento);
+    }
+
+    .opcion-voto input {
+        accent-color: var(--violeta);
+    }
+
+.resultados {
+    padding-top: 15px;
+    border-top: 1px solid var(--borde);
+}
+
+.total-votos {
+    color: var(--texto-secundario);
+    font-size: 0.9rem;
+}
+
+.resultado-item {
+    margin-top: 15px;
+}
+
+.resultado-info {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 7px;
+    font-size: 0.9rem;
+}
+
+    .resultado-info span:last-child {
+        color: var(--acento);
+        text-align: right;
+    }
+
+.barra-fondo {
+    height: 10px;
+    background: #120d1d;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.barra-progreso {
+    height: 100%;
+    background: var(--violeta);
+    border-radius: 20px;
+    transition: width 0.3s;
+}
+
+.mensaje-voto {
+    color: var(--verde);
+    background: #14532d33;
+    border: 1px solid #166534;
+    border-radius: 9px;
+    padding: 12px;
+}
+
+.acciones-encuesta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 15px;
+    border-top: 1px solid var(--borde);
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--texto-secundario);
+}
+
+    .empty-state h3 {
+        color: var(--acento);
+    }
+
+.alert {
+    max-width: 750px;
+    margin: 0 auto 20px;
+    padding: 14px;
+    border-radius: 9px;
+}
+
+.alert-success {
+    color: #86efac;
+    background: #14532d;
+    border: 1px solid #166534;
+}
+
+.alert-danger {
+    color: #fca5a5;
+    background: #7f1d1d;
+    border: 1px solid #991b1b;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 20px 12px;
+    }
+
+    .page-header h1 {
+        font-size: 1.9rem;
+    }
+
+    .form-card,
+    .encuesta-card {
+        padding: 18px;
+    }
+
+    .encuestas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .resultado-info {
+        font-size: 0.8rem;
+    }
+}

@@ -1,0 +1,178 @@
+﻿@model IEnumerable<PlataformaEncuestas.Models.EncuestaModel>
+
+@{
+    ViewData["Title"] = "Plataforma de Encuestas";
+    var encuestasVotadas = ViewBag.EncuestasVotadas as List<int> ?? new List<int>();
+}
+
+<div class="container">
+    <header class="page-header">
+        <h1>Plataforma de Encuestas</h1>
+        <p>Crea encuestas, comparte preguntas y conoce la opinión de los demás.</p>
+    </header>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success">@TempData["Mensaje"]</div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <section class="form-card">
+        <h2>Crear una encuesta</h2>
+
+        <form asp-action="Crear" method="post" id="formEncuesta">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="titulo">Título</label>
+                <input type="text" id="titulo" name="titulo" maxlength="100" required placeholder="Ej. Encuesta sobre videojuegos">
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" maxlength="300" placeholder="Describe brevemente tu encuesta"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="pregunta">Pregunta principal</label>
+                <input type="text" id="pregunta" name="pregunta" maxlength="200" required placeholder="¿Cuál es tu videojuego favorito?">
+            </div>
+
+            <div class="form-group">
+                <label>Opciones de respuesta</label>
+
+                <div id="opcionesContainer">
+                    <input type="text" name="opciones" maxlength="100" required placeholder="Primera opción">
+                    <input type="text" name="opciones" maxlength="100" required placeholder="Segunda opción">
+                </div>
+
+                <button type="button" id="agregarOpcion" class="btn-secondary">
+                    + Agregar opción
+                </button>
+
+                <small>Puedes agregar entre 2 y 10 opciones.</small>
+            </div>
+
+            <button type="submit" class="btn-primary">Crear encuesta</button>
+        </form>
+    </section>
+
+    <section class="encuestas-section">
+        <div class="section-heading">
+            <h2>Encuestas disponibles</h2>
+            <span>@Model.Count() encuestas</span>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <h3>Aún no hay encuestas</h3>
+                <p>Crea la primera encuesta para comenzar.</p>
+            </div>
+        }
+        else
+        {
+            <div class="encuestas-grid">
+                @foreach (var encuesta in Model)
+                {
+                    var totalVotos = encuesta.Votos.Count;
+                    var yaVoto = encuestasVotadas.Contains(encuesta.Id);
+
+                    <article class="encuesta-card">
+                        <div class="encuesta-header">
+                            <div>
+                                <h3>@encuesta.Titulo</h3>
+                                <p>@encuesta.Descripcion</p>
+                            </div>
+
+                            <span class="estado @(encuesta.Publicada ? "publicada" : "cerrada")">
+                                @(encuesta.Publicada ? "Publicada" : "Cerrada")
+                            </span>
+                        </div>
+
+                        <h4>@encuesta.Pregunta</h4>
+
+                        @if (encuesta.Publicada && !yaVoto)
+                        {
+                            <form asp-action="Votar" method="post">
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden" name="encuestaId" value="@encuesta.Id">
+
+                                <div class="opciones-voto">
+                                    @foreach (var opcion in encuesta.Opciones)
+                                    {
+                                        <label class="opcion-voto">
+                                            <input type="radio" name="opcionId" value="@opcion.Id" required>
+                                            <span>@opcion.Texto</span>
+                                        </label>
+                                    }
+                                </div>
+
+                                <button type="submit" class="btn-primary">Enviar voto</button>
+                            </form>
+                        }
+                        else if (yaVoto)
+                        {
+                            <p class="mensaje-voto">Ya has participado en esta encuesta.</p>
+                        }
+                        else
+                        {
+                            <p class="mensaje-voto">Esta encuesta está cerrada.</p>
+                        }
+
+                        <div class="resultados">
+                            <h4>Resultados</h4>
+                            <p class="total-votos">Total de votos: @totalVotos</p>
+
+                            @foreach (var opcion in encuesta.Opciones)
+                            {
+                                var cantidad = opcion.Votos.Count;
+                                var porcentaje = totalVotos > 0
+                                    ? (double)cantidad / totalVotos * 100
+                                    : 0;
+
+                                <div class="resultado-item">
+                                    <div class="resultado-info">
+                                        <span>@opcion.Texto</span>
+                                        <span>@cantidad votos (@porcentaje.ToString("0.#")%)</span>
+                                    </div>
+
+                                    <div class="barra-fondo">
+                                        <div class="barra-progreso" style="width: @(porcentaje.ToString(System.Globalization.CultureInfo.InvariantCulture))%"></div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="acciones-encuesta">
+                            <form asp-action="CambiarEstado" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@encuesta.Id">
+
+                                <button type="submit" class="btn-secondary">
+                                    @(encuesta.Publicada ? "Cerrar encuesta" : "Publicar encuesta")
+                                </button>
+                            </form>
+
+                            <form asp-action="Eliminar" method="post" class="form-eliminar">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@encuesta.Id">
+
+                                <button type="submit" class="btn-danger">Eliminar</button>
+                            </form>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </section>
+</div>
+
+@section Scripts {
+    <script src="~/js/encuestas.js" asp-append-version="true"></script>
+}
