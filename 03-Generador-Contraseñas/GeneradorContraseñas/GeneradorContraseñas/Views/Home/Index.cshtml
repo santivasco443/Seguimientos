@@ -1,0 +1,95 @@
+﻿@model GeneradorContraseñas.Models.GeneradorModel
+
+@{
+    ViewData["Title"] = "Generador de Contraseñas";
+}
+
+<div class="generator-container">
+    <div class="generator-card">
+        <div class="header">
+            <div class="icon-container">
+                <span>🔐</span>
+            </div>
+            <h1>Generador de Contraseñas</h1>
+            <p>Crea contraseñas seguras y aleatorias</p>
+        </div>
+
+        <form asp-controller="Home" asp-action="Index" method="post">
+            <div asp-validation-summary="All" class="validation-errors"></div>
+
+            <div class="length-section">
+                <div class="section-heading">
+                    <label asp-for="Longitud">Longitud de la contraseña</label>
+                    <span id="length-value">@Model.Longitud</span>
+                </div>
+
+                <input asp-for="Longitud" type="range" min="8" max="64" id="length-slider" />
+                <span asp-validation-for="Longitud" class="field-error"></span>
+            </div>
+
+            <div class="options-section">
+                <h3>Tipos de caracteres</h3>
+
+                <label class="option">
+                    <span>
+                        <strong>Mayúsculas</strong>
+                        <small>ABCDEF</small>
+                    </span>
+                    <input asp-for="Mayusculas" type="checkbox" />
+                </label>
+
+                <label class="option">
+                    <span>
+                        <strong>Minúsculas</strong>
+                        <small>abcdef</small>
+                    </span>
+                    <input asp-for="Minusculas" type="checkbox" />
+                </label>
+
+                <label class="option">
+                    <span>
+                        <strong>Números</strong>
+                        <small>123456</small>
+                    </span>
+                    <input asp-for="Numeros" type="checkbox" />
+                </label>
+
+                <label class="option">
+                    <span>
+                        <strong>Símbolos</strong>
+                        <small>!#$%&*</small>
+                    </span>
+                    <input asp-for="Simbolos" type="checkbox" />
+                </label>
+            </div>
+
+            <button type="submit" class="generate-button">
+                Generar contraseña
+            </button>
+        </form>
+
+        @if (!string.IsNullOrEmpty(Model.Resultado))
+        {
+            <div class="result-section">
+                <h3>Tu contraseña generada</h3>
+
+                <div class="password-box">
+                    <input type="text" id="password-result" value="@Model.Resultado" readonly />
+                    <button type="button" id="copy-button" aria-label="Copiar contraseña">
+                        <span>📋</span>
+                    </button>
+                </div>
+
+                <p id="copy-message">Contraseña generada correctamente</p>
+            </div>
+        }
+
+        <div class="footer">
+            <span>Generador de contraseñas seguras</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/generador.js" asp-append-version="true"></script>
+}
